@@ -10,13 +10,13 @@ on:
   workflow_dispatch:
 
 jobs:
-  greeting:
+  fetch:
     runs-on: ubuntu-latest
     permissions:
       # Allow commits to repo
       contents: write
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
 
       - name: Find today's date
         id: today
@@ -25,7 +25,7 @@ jobs:
       - name: Fetch Wordle JSON
         id: fetch-wordle
         run: |
-          curl https://www.nytimes.com/svc/wordle/v2/${{ steps.today.outputs.today }}.json` -o data/wordle/${{ steps.today.outputs.today }}.json
+          curl https://www.nytimes.com/svc/wordle/v2/${{ steps.today.outputs.today }}.json -o data/wordle/${{ steps.today.outputs.today }}.json
 
       - name: Commit Changes
         uses: devops-infra/action-commit-push@master
