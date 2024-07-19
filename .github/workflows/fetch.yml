@@ -1,0 +1,34 @@
+name: Fetch
+
+
+on:
+  # Daily at 9:06 AM UTC (2:06 AM PST or 3:06 AM PDT)
+  schedule:
+    - cron: '06 9 * * *'
+
+  # Allow manual triggering
+  workflow_dispatch:
+
+jobs:
+  greeting:
+    runs-on: ubuntu-latest
+    permissions:
+      # Allow commits to repo
+      contents: write
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Find today's date
+        id: today
+        run: echo "today=$(date +'%Y-%m-%d')" >> $GITHUB_OUTPUT
+
+      - name: Fetch Wordle JSON
+        id: fetch-wordle
+        run: |
+          curl https://www.nytimes.com/svc/wordle/v2/${{ steps.today.outputs.today }}.json` -o data/wordle/${{ steps.today.outputs.today }}.json
+
+      - name: Commit Changes
+        uses: devops-infra/action-commit-push@master
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          commit_message: Fetch for ${{ steps.today.outputs.today }}
