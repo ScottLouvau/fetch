@@ -20,7 +20,7 @@ jobs:
 
       - name: Find tomorrow's date (UTC), which is the new date (Wellington, NZ)
         id: today
-        run: echo "today=$(date -v+1d +'%Y-%m-%d')" >> $GITHUB_OUTPUT
+        run: echo "today=$(date --date 'tomorrow' +'%Y-%m-%d')" >> $GITHUB_OUTPUT
 
       - name: Fetch Wordle JSON
         id: fetch-wordle
