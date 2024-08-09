@@ -2,9 +2,9 @@ name: Fetch
 
 
 on:
-  # Daily at 9:06 AM UTC (2:06 AM PST or 3:06 AM PDT)
+  # Daily at 12:06 PM UTC (12:06 AM Wellington time; first over the date line)
   schedule:
-    - cron: '06 9 * * *'
+    - cron: '06 12 * * *'
 
   # Allow manual triggering
   workflow_dispatch:
@@ -18,9 +18,9 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Find today's date
+      - name: Find tomorrow's date (UTC), which is the new date (Wellington, NZ)
         id: today
-        run: echo "today=$(date +'%Y-%m-%d')" >> $GITHUB_OUTPUT
+        run: echo "today=$(date -v+1d +'%Y-%m-%d')" >> $GITHUB_OUTPUT
 
       - name: Fetch Wordle JSON
         id: fetch-wordle
